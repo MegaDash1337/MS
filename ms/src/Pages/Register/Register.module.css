@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Montserrat, sans-serif;
+}
+
+.register_container {
+  background-color: #fca22b54;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10%;
+}
+
+.register_element {
+  margin: 0 30%;
+}
+
+.register_form {
+  width: fit-content;
+  margin: 0 auto;
+}

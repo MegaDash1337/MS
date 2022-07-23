@@ -1,0 +1,12 @@
+.m_button {
+  border-color: transparent;
+  border-radius: 4px;
+  background-color: white;
+  padding: 3px;
+  cursor: pointer;
+  margin: 6px 0;
+}
+
+button:focus {
+  outline: 0;
+}
