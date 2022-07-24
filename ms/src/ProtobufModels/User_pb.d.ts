@@ -2,6 +2,7 @@
 // file: User.proto
 
 import * as jspb from "google-protobuf";
+import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 export class User extends jspb.Message {
   getId(): number;
@@ -18,6 +19,9 @@ export class User extends jspb.Message {
 
   getShortname(): string;
   setShortname(value: string): void;
+
+  getRegistred(): number;
+  setRegistred(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): User.AsObject;
@@ -36,6 +40,7 @@ export namespace User {
     password: string,
     email: string,
     shortname: string,
+    registred: number,
   }
 }
 

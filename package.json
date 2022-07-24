@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@types/jquery": "^3.5.14",
     "ts-protoc-gen": "^0.15.0"
   }
 }

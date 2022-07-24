@@ -10,7 +10,7 @@ PLUGIN_PATH = "D:/VS Code/JS/MS/ms/node_modules/.bin/protoc-gen-ts.cmd"
 
 proto_path = "D:/VS Code/JS/MS/Protobuf Sources"
 output_ts_path = "D:/VS Code/JS/MS/ms/src/ProtobufModels"
-output_csharp_path = "C:/"
+output_csharp_path = "D:/VS Code/JS/MS/MSAPI/MSAPI/Models/"
 
 
 def main():

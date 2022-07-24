@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import styles from "./Register.module.css";
 import MInput from "../../components/MInput/MInput";
-import SendRegister from "../../API/RegisterServices.ts";
+import {
+  SendRegister,
+  CheckFreeShortname,
+} from "../../API/RegisterServices.ts";
 import MButton from "../../components/MButton/MButton";
 
 export default function Register() {
@@ -11,7 +14,8 @@ export default function Register() {
   const [shortName, setShortName] = useState("");
 
   function submitRegister(event) {
-    alert(`${name}, ${password}, ${email}, ${shortName}`);
+    CheckFreeShortname(shortName);
+
     event.preventDefault();
   }
 

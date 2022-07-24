@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "";
+option csharp_namespace = "MSAPI.Models";
 
 message User {
     int64 id = 1;
@@ -8,4 +8,6 @@ message User {
     string password = 3;
     string email = 4;
     string shortName = 5;
+    
+    int64 registred = 6;
 }
