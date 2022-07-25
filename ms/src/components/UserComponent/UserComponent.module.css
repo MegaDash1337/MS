@@ -1,0 +1,21 @@
+.user_component {
+  padding: 3px;
+  margin: 10px;
+  border-radius: 10px;
+  width: -webkit-fill-available;
+  cursor: pointer;
+  padding: 1%;
+}
+
+.user_component:hover {
+  background-color: #fac785;
+}
+
+.name_element {
+  font-weight: 10;
+}
+
+.shortname_element {
+  color: rgb(139, 139, 139);
+  font-size: smaller;
+}

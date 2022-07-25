@@ -1,9 +1,6 @@
-﻿using Google.Protobuf;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MSAPI.Database;
 using MSAPI.Models;
-using System.Net.Sockets;
 
 namespace MSAPI.Controllers
 {
@@ -11,22 +8,74 @@ namespace MSAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        [HttpPost("register/")]
-        public async Task<ActionResult<byte[]>> Register(User user)
+        private readonly DatabaseContext _context;
+        public UsersController()
         {
-            var controller = new DatabaseContext();
+            _context = new DatabaseContext();
+        }
 
-            user.Password = user.Password.GetSHA256();
+        [HttpPost("register/")]
+        public async Task<ActionResult<User>> Register(User user)
+        {
+            if (!CheckNullUser(user))
+                return BadRequest(new SingleStringProperty("Some of user fields was null or empty"));
 
-            await controller.Users.AddAsync(user);
+            if (IsShortNameTaken(user.Shortname))
+                return BadRequest(new SingleStringProperty("This shortname is taken, try to set another"));
 
-            return user.ToByteArray();
+            if (IsEmailTaken(user.Email))
+                return BadRequest(new SingleStringProperty("This email is taken, try to set another"));
+
+            user.Password = user.Password?.GetSHA256();
+
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return user;
         }
 
         [HttpPost("check_shortname/")]
-        public async Task<bool> CheckName([FromBody] byte[] shortName)
+        public bool CheckShortName([FromBody] SingleStringProperty shortName)
         {
-            return true;
+            return IsShortNameTaken(shortName.Property);
+        }
+
+        [HttpPost("check_email/")]
+        public bool CheckEmail([FromBody] SingleStringProperty email)
+        {
+            return IsEmailTaken(email.Property);
+        }
+
+        [HttpPost("by_short_name/")]
+        public List<Contact> GetContactsByShortName([FromBody] SingleStringProperty shortName)
+        {
+            var users = _context.Users.Where(user => user.Shortname.Contains(shortName.Property));
+            var contacts = new List<Contact>();
+
+            foreach (var user in users)
+            {
+                contacts.Add(new Contact(user));
+            }
+
+            return contacts;
+        }
+
+        private bool IsShortNameTaken(string shortName)
+        {
+            return _context.Users.Where(user => user.Shortname == shortName).Any();
+        }
+
+        private bool IsEmailTaken(string email)
+        {
+            return _context.Users.Where(user => user.Email == email).Any();
+        }
+
+        private static bool CheckNullUser(User user)
+        {
+            return !string.IsNullOrEmpty(user.Name)
+                && !string.IsNullOrEmpty(user.Password)
+                && !string.IsNullOrEmpty(user.Email)
+                && !string.IsNullOrEmpty(user.Shortname);
         }
     }
 }

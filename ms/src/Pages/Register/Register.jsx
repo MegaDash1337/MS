@@ -1,22 +1,37 @@
 import React, { useState } from "react";
 import styles from "./Register.module.css";
-import MInput from "../../components/MInput/MInput";
+import MInput from "../../components/MInput/MInput.jsx";
 import {
-  SendRegister,
-  CheckFreeShortname,
-} from "../../API/RegisterServices.ts";
-import MButton from "../../components/MButton/MButton";
+  CheckShortname,
+  Register as RegisterUser,
+} from "../../API/UserService.ts";
+import MButton from "../../components/MButton/MButton.jsx";
+import User from "../../Models/User.ts";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [shortName, setShortName] = useState("");
+  const [error, setError] = useState("");
 
-  function submitRegister(event) {
-    CheckFreeShortname(shortName);
-
+  async function submitRegister(event) {
     event.preventDefault();
+
+    if (!validateFields()) {
+      setError("Поля не могут быть пустыми!");
+      return;
+    }
+
+    const user = new User(name, password, email, shortName);
+
+    try {
+      const registred = await RegisterUser(user);
+
+      setError(null);
+    } catch (error) {
+      setError(error.message);
+    }
   }
 
   function changeName(event) {
@@ -35,6 +50,10 @@ export default function Register() {
     setShortName(event.target.value);
   }
 
+  function validateFields() {
+    return name !== "" && password !== "" && email != "" && shortName != "";
+  }
+
   return (
     <div className={styles.register_element}>
       <div className={styles.register_container}>
@@ -42,6 +61,16 @@ export default function Register() {
           Регистрация
         </h1>
 
+        <div
+          style={{
+            color: "red",
+            fontSize: 10,
+            width: "fit-content",
+            margin: "0 auto",
+          }}
+        >
+          {error}
+        </div>
         <form onSubmit={submitRegister} className={styles.register_form}>
           <MInput value={name} onChange={changeName} placeholder="Имя" />
 
